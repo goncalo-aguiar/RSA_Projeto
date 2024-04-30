@@ -44,10 +44,9 @@ def on_message(client, userdata, msg):
                     distOtherBoat = calculateDistance(other_boat_location, other_boat_intention)
                     distThisBoat = calculateDistance(current_location, other_boat_intention)
 
-                    print("DISTANCE OUTRO BARCO " + str(other_boat_location) + " " + str(other_boat_intention) + " "  + str(distOtherBoat) )
-                    print("DISTANCE ESTE BARCO " +  str(current_location) + " " +  str(intention[1]) + " " + str(distThisBoat))
+                    
                     if  distOtherBoat <= distThisBoat:
-                        print("LIMPEI")
+                        
                         boias_limpas[data["intention"][0]] = data["intention"][1]
                         intention = []
                         
