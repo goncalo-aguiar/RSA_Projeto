@@ -1,8 +1,10 @@
-sudo iptables -P FORWARD ACCEPT
+
 
 docker network create mqtt_network --subnet 192.168.1.0/24
 
-docker-compose up --build -docker
+docker-compose up --build -d
+
+sudo iptables -P FORWARD ACCEPT
 
 ./start.sh
 
