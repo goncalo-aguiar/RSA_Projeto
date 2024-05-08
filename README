@@ -2,9 +2,15 @@
 
 docker network create mqtt_network --subnet 192.168.1.0/24
 
+sudo iptables -P FORWARD ACCEPT
+
 docker-compose up --build -d
 
-sudo iptables -P FORWARD ACCEPT
+cd backend
+python3 api.py
+
+cd frontend
+npm start
 
 ./start.sh
 
