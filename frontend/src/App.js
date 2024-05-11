@@ -17,7 +17,6 @@ function App() {
 
         const trashResponse = await fetch('http://localhost:8080/api/trash');
         const trashData = await trashResponse.json();
-        console.log('Trash data:', trashData);
         setTrash(Object.entries(trashData).map(([id, [type,trashLocation]]) => ({ id, type,trashLocation })));
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -38,19 +37,18 @@ function App() {
         const foundBoats = boats.filter(boat => boat.position[0] === j && boat.position[1] === i);
         const foundTrash = trash.filter(tr => tr.trashLocation[0] === j && tr.trashLocation[1] === i);
 
-        console.log('Found trash:', foundTrash);
         const cell = (
           <div key={`${i}-${j}`} style={{ width: side, height: side, border: '1px solid black', position: 'absolute', top: i * side, left: j * side }}>
-            {/* Rendering boats */}
+            {/* Rendering boats and buoys */}
             {foundBoats.map(boat => (
-              <div key={boat.id} style={{ width: '100%', height: '100%', backgroundColor: 'red', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+              <div key={boat.id} style={{ width: '100%', height: '100%', backgroundColor: boat.type === 'boat' ? 'blue' : 'red', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
                 {boat.type} {boat.id}
               </div>
             ))}
             {/* Rendering trash */}
             {foundTrash.map(tr => (
-              <div key={tr.id} style={{ width: '100%', height: '100%', backgroundColor: 'green', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
-                Trash
+              <div key={tr.id} style={{ width: '100%', height: '100%', backgroundColor: 'grey', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+                Trash {tr.id}
               </div>
             ))}
           </div>

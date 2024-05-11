@@ -15,6 +15,13 @@ def on_connect(client, userdata, flags, rc):
     # Subscribe to all subtopics under nodes
     client.subscribe("nodes/#")
 
+def calculateDistance(loc1, loc2):
+    xLoc1 = loc1[0]
+    xLoc2 = loc2[0]
+    yLoc1 = loc1[1]
+    yLoc2 = loc2[1]
+    return ((xLoc2 - xLoc1)**2 + (yLoc2 - yLoc1)**2)**0.5
+
 def on_message(client, userdata, msg):
     data = json.loads(msg.payload.decode("utf-8"))
 
@@ -24,19 +31,23 @@ def on_message(client, userdata, msg):
     global trash_location
     
     if data["type"] == "boat":
-        print(f"Message from {msg.topic}: {data}")
-       
-        if data["location"] == trash_location:
-            time_being_cleaned = time_being_cleaned+1
+        distOtherMessage = calculateDistance(initial_location,data['location'])
+        if distOtherMessage <=4:
+            print(f"Message from {msg.topic}: {data}")
         
-        if time_being_cleaned >= 3:
-            status= "clean"
-            time_being_cleaned = 0
-            trash_location = []
+            if data["location"] == trash_location:
+                time_being_cleaned = time_being_cleaned+1
+            
+            if time_being_cleaned >= 3:
+                status= "clean"
+                time_being_cleaned = 0
+                trash_location = []
 
     elif data["type"] == "boia":
         if data["id"] != boia_id:
-            print(f"Message from {msg.topic}: {data}")
+            distOtherMessage = calculateDistance(initial_location,data['location'])
+            if distOtherMessage <=4:
+                print(f"Message from {msg.topic}: {data}")
 
 
 
@@ -98,5 +109,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
-    time.sleep(5)
+    time.sleep(2)
 

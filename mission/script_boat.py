@@ -33,35 +33,41 @@ def on_message(client, userdata, msg):
     
     if data["type"] == "boat":
         
+        
         if data["id"] != boat_id:
             print(f"Message from {msg.topic}: {data}")
-            if data["intention"] != [] and intention != [] :
-
-                
-                other_boat_intention =  data["intention"][1]
-                if (other_boat_intention == intention[1]) and other_boat_intention not in boias_limpas.values():
-                    other_boat_location = data["location"]
-                    distOtherBoat = calculateDistance(other_boat_location, other_boat_intention)
-                    distThisBoat = calculateDistance(current_location, other_boat_intention)
+            distOtherMessage = calculateDistance(current_location,data['location'])
+            if distOtherMessage <=4:
+                if data["intention"] != [] and intention != [] :
 
                     
-                    if  distOtherBoat <= distThisBoat:
+                    other_boat_intention =  data["intention"][1]
+                    if (other_boat_intention == intention[1]) and other_boat_intention not in boias_limpas.values():
+                        other_boat_location = data["location"]
+                        distOtherBoat = calculateDistance(other_boat_location, other_boat_intention)
+                        distThisBoat = calculateDistance(current_location, other_boat_intention)
+
                         
-                        boias_limpas[data["intention"][0]] = data["intention"][1]
-                        intention = []
-                        
-                        
-                    else:
-                        intention = data["intention"] 
+                        if  distOtherBoat <= distThisBoat:
+                            
+                            boias_limpas[data["intention"][0]] = data["intention"][1]
+                            intention = []
+                            
+                            
+                        else:
+                            intention = data["intention"] 
         
     elif data["type"] == "boia":
-            print(f"Message from {msg.topic}: {data}")
-            if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values() :
-                    intention = [data["id"],data["location"],data["trash_location"]]
+            distOtherMessage = calculateDistance(current_location,data['location'])
+            if distOtherMessage <=4:
+                print(f"Message from {msg.topic}: {data}")
+                if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values() :
+                        intention = [data["id"],data["location"],data["trash_location"]]
 
-            if data["status"] == "clean":
-                if data["location"][1] not in boias_limpas.values() :
-                   boias_limpas[data["id"]] = data["location"]
+                if data["status"] == "clean":
+                    if data["location"][1] not in boias_limpas.values() :
+                        boias_limpas[data["id"]] = data["location"]
+                        intention = []
 
 
 def generate_random_coordinates():
@@ -142,12 +148,12 @@ while True:
         status = "recolhendo"
     else:
 
-        
+        goTo(generate_random_coordinates())
         status = "procurando"
     
 
 
-    time.sleep(5)
+    time.sleep(2)
 
 
     
