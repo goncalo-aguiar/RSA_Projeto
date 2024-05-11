@@ -57,7 +57,7 @@ def on_message(client, userdata, msg):
     elif data["type"] == "boia":
             print(f"Message from {msg.topic}: {data}")
             if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values() :
-                    intention = [data["id"],data["location"]]
+                    intention = [data["id"],data["location"],data["trash_location"]]
 
             if data["status"] == "clean":
                 if data["location"][1] not in boias_limpas.values() :
@@ -66,9 +66,9 @@ def on_message(client, userdata, msg):
 
 def generate_random_coordinates():
     
-    x = random.uniform(0, 15)
+    x = random.uniform(0, 29)
     
-    y = random.uniform(0, 15)
+    y = random.uniform(0, 14)
     return [int(x),int(y)]
 
 
@@ -123,6 +123,8 @@ status = "procurando"
 
 broker_ip = "192.168.1.2"
 
+broker_ip = "localhost"
+
 client = mqtt.Client(client_id=boat_id)
 client.on_connect = on_connect
 client.on_message = on_message
@@ -136,9 +138,11 @@ while True:
 
     if intention != []:
         
-        goTo(intention[1])
+        goTo(intention[2])
         status = "recolhendo"
     else:
+
+        
         status = "procurando"
     
 

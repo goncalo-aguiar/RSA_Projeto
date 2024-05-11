@@ -1,3 +1,4 @@
+import math
 import sys
 import paho.mqtt.client as mqtt
 import threading
@@ -20,19 +21,18 @@ def on_message(client, userdata, msg):
     global time_being_cleaned
     global initial_location
     global status
+    global trash_location
     
     if data["type"] == "boat":
         print(f"Message from {msg.topic}: {data}")
-        print(time_being_cleaned)
-        if data["location"] == initial_location:
+       
+        if data["location"] == trash_location:
             time_being_cleaned = time_being_cleaned+1
         
         if time_being_cleaned >= 3:
             status= "clean"
             time_being_cleaned = 0
-        print(initial_location)
-        print(data["location"])
-
+            trash_location = []
 
     elif data["type"] == "boia":
         if data["id"] != boia_id:
@@ -45,10 +45,27 @@ def send_message(client, topic, message):
 
 def generate_random_coordinates():
     
-    x = random.uniform(0, 7)
+    x = random.uniform(0, 29)
     
-    y = random.uniform(0, 7)
+    y = random.uniform(0, 14)
     return [int(x),int(y)]
+
+
+def generate_random_coordinates_trash(initial_location, radius):
+    angle = random.uniform(0, 2 * math.pi)
+    max_distance = min(radius, min(abs(initial_location[0] - 0), abs(initial_location[0] - 29)), 
+                               min(abs(initial_location[1] - 0), abs(initial_location[1] - 14)))
+    distance = random.uniform(0, max_distance)
+    
+    # Generate random coordinates around the center
+    x_offset = distance * math.cos(angle)
+    y_offset = distance * math.sin(angle)
+    
+    # Calculate the new coordinates
+    x_new = initial_location[0] + x_offset
+    y_new = initial_location[1] + y_offset
+    
+    return [int(x_new), int(y_new)]
 
 
 if len(sys.argv) < 3:
@@ -65,6 +82,7 @@ client.on_message = on_message
 
 
 broker_ip = "192.168.1.2"
+broker_ip = "localhost"
 client.connect(broker_ip, 1883, 60)
 
 time_being_cleaned = 0
@@ -73,10 +91,12 @@ status = "dirty"
 
 initial_location = generate_random_coordinates()
 
+trash_location = generate_random_coordinates_trash(initial_location,4)
+
 
 threading.Thread(target=client.loop_start).start()
 
 while True:
-    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status})
+    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
     time.sleep(5)
 

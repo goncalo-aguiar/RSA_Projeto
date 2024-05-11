@@ -1,5 +1,7 @@
 
 
+
+
 docker network create mqtt_network --subnet 192.168.1.0/24
 
 sudo iptables -P FORWARD ACCEPT
@@ -10,7 +12,12 @@ cd backend
 python3 api.py
 
 cd frontend
+nvm install 16.15.1
 npm start
 
 ./start.sh
+
+
+
+
 

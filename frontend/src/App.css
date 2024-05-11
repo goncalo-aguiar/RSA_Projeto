@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.grid-container {
+  position: relative;
+}
+
+.square {
+  width: 20px;  
+  height: 20px;
+  position: absolute;
+}
+
