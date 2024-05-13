@@ -31,7 +31,6 @@ def on_message(client, userdata, msg):
     global intention 
     global boias_limpas
 
-   
     
     if data["type"] == "boat":
         
@@ -58,6 +57,9 @@ def on_message(client, userdata, msg):
                             
                         else:
                             intention = data["intention"] 
+                
+                        
+
                 
         
     elif data["type"] == "boia":
@@ -120,6 +122,8 @@ def goTo(coordinates):
 
 
 
+
+
 def send_message(client, topic, message):
     client.publish(topic, json.dumps(message))
 
@@ -162,7 +166,7 @@ while True:
         status = "recolhendo"
     else:
 
-       
+        
         goTo(generate_random_coordinates())
         status = "procurando"
     
