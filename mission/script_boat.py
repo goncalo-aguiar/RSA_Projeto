@@ -30,6 +30,8 @@ def on_message(client, userdata, msg):
     data = json.loads(msg.payload.decode("utf-8"))
     global intention 
     global boias_limpas
+
+   
     
     if data["type"] == "boat":
         
@@ -37,7 +39,7 @@ def on_message(client, userdata, msg):
         if data["id"] != boat_id:
             print(f"Message from {msg.topic}: {data}")
             distOtherMessage = calculateDistance(current_location,data['location'])
-            if distOtherMessage <=4:
+            if distOtherMessage <=5:
                 if data["intention"] != [] and intention != [] :
 
                     
@@ -56,18 +58,30 @@ def on_message(client, userdata, msg):
                             
                         else:
                             intention = data["intention"] 
+                
         
     elif data["type"] == "boia":
             distOtherMessage = calculateDistance(current_location,data['location'])
-            if distOtherMessage <=4:
+            if distOtherMessage <=5:
                 print(f"Message from {msg.topic}: {data}")
                 if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values() :
-                        intention = [data["id"],data["location"],data["trash_location"]]
+                    intention = [data["id"],data["location"],data["trash_location"]]
 
-                if data["status"] == "clean":
-                    if data["location"][1] not in boias_limpas.values() :
-                        boias_limpas[data["id"]] = data["location"]
-                        intention = []
+                
+
+                if data["status"] == "clean" and data["location"][1] not in boias_limpas.values() and intention != []:
+                    boias_limpas[data["id"]] = data["location"] 
+                    intention = []
+
+                if intention == [] and data["near"] != [] and data["near"][0][1] not in boias_limpas.values():
+                    intention = data["near"][0]
+                    #boias_limpas[intention[0]] = intention[1]
+                    print("GOING TO NEAR!")
+                    
+                    
+                        
+                        
+                    
 
 
 def generate_random_coordinates():
@@ -148,6 +162,7 @@ while True:
         status = "recolhendo"
     else:
 
+       
         goTo(generate_random_coordinates())
         status = "procurando"
     
