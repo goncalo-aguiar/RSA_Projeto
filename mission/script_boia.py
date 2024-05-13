@@ -52,12 +52,14 @@ def on_message(client, userdata, msg):
                 print(f"Message from {msg.topic}: {data}")
                 if len(near) >0:
                     print(near[0])
-                print([data["id"],data['location'],data['trash_location']])
+                
                 if data["status"] == "dirty" and [data["id"],data['location'],data['trash_location']] not in near:
                     near.append([data["id"],data['location'],data['trash_location']])
-                if  data["status"] == "clean" and [data["id"],data['location'],data['trash_location']] in near:
-                    print("Limpei")
-                    near.remove([data["id"],data['location'],data['trash_location']])
+                #if  data["status"] == "clean" and [data["id"],data['location'],data['trash_location']] in near:
+                   # print("Limpei")
+                for x in near:
+                    if x[0] == data["id"] and data["status"] == "clean":
+                        near.remove(x)
 
                 
 

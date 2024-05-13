@@ -45,8 +45,8 @@ def on_message(client, userdata, msg):
                     other_boat_intention =  data["intention"][1]
                     if (other_boat_intention == intention[1]) and other_boat_intention not in boias_limpas.values():
                         other_boat_location = data["location"]
-                        distOtherBoat = calculateDistance(other_boat_location, other_boat_intention)
-                        distThisBoat = calculateDistance(current_location, other_boat_intention)
+                        distOtherBoat = calculateDistance(other_boat_location,  data["intention"][2])
+                        distThisBoat = calculateDistance(current_location,  data["intention"][2])
 
                         
                         if  distOtherBoat <= distThisBoat:
