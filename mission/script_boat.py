@@ -76,7 +76,13 @@ def on_message(client, userdata, msg):
                     intention = []
 
                 if intention == [] and data["near"] != [] and data["near"][0][1] not in boias_limpas.values():
-                    intention = data["near"][0]
+                    dist = 2000
+                    for aux in data["near"]:
+                        minNear = calculateDistance(current_location,aux[2])
+                        if dist > minNear:
+                            dist = minNear
+                            intention = aux
+                    
                     #boias_limpas[intention[0]] = intention[1]
                     print("GOING TO NEAR!")
                     
