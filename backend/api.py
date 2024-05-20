@@ -13,6 +13,9 @@ buoys = {}  # Dictionary to store boat positions
 trash_location = {}
 
 
+visited_locations_set = list()
+
+
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("nodes/#")
@@ -28,10 +31,17 @@ def on_message(client, userdata, msg):
         trash_location[data['id']] = [data['type'],data['trash_location']]
     else:
         boats[data['id']] = [data['type'],data['location'],data['intention']]
+
+        if data['id'] == '4':
+            for x in data["visited_locations"]:
+                if x not in visited_locations_set:
+                    visited_locations_set.append(x)
+        
+        
+    
     
 
         
-    
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -51,6 +61,14 @@ def get_buoys():
 @app.route('/api/trash', methods=['GET'])
 def get_trash():
     return jsonify(trash_location)
+
+
+@app.route('/api/visited', methods=['GET'])
+def get_visited():
+    print(visited_locations_set)
+
+    return jsonify(visited_locations_set)
+
 
 
 

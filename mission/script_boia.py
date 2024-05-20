@@ -29,7 +29,7 @@ def on_message(client, userdata, msg):
     global initial_location
     global status
     global trash_location
-    global near
+    
     
     if data["type"] == "boat":
         distOtherMessage = calculateDistance(initial_location,data['location'])
@@ -47,19 +47,14 @@ def on_message(client, userdata, msg):
     elif data["type"] == "boia":
         if data["id"] != boia_id:
             distOtherMessage = calculateDistance(initial_location,data['location'])
-            if distOtherMessage <=5:
+            if distOtherMessage <=3:
 
                 print(f"Message from {msg.topic}: {data}")
-                if len(near) >0:
-                    print(near[0])
+               
                 
-                if data["status"] == "dirty" and [data["id"],data['location'],data['trash_location']] not in near:
-                    near.append([data["id"],data['location'],data['trash_location']])
-                #if  data["status"] == "clean" and [data["id"],data['location'],data['trash_location']] in near:
-                   # print("Limpei")
-                for x in near:
-                    if x[0] == data["id"] and data["status"] == "clean":
-                        near.remove(x)
+               
+                
+                
 
                 
 
@@ -113,16 +108,16 @@ client.connect(broker_ip, 1883, 60)
 time_being_cleaned = 0
 status = "dirty"
 
-near = []
+
 
 initial_location = generate_random_coordinates()
 
-trash_location = generate_random_coordinates_trash(initial_location,4)
+trash_location = generate_random_coordinates_trash(initial_location,2)
 
 
 threading.Thread(target=client.loop_start).start()
 
 while True:
-    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location,"near":near})
+    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
     time.sleep(2)
 
