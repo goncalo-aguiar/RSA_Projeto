@@ -47,7 +47,7 @@ def on_message(client, userdata, msg):
     elif data["type"] == "boia":
         if data["id"] != boia_id:
             distOtherMessage = calculateDistance(initial_location,data['location'])
-            if distOtherMessage <=3:
+            if distOtherMessage <=5:
 
                 print(f"Message from {msg.topic}: {data}")
                
@@ -65,16 +65,16 @@ def send_message(client, topic, message):
 
 def generate_random_coordinates():
     
-    x = random.uniform(0, 29)
+    x = random.uniform(0, 119)
     
-    y = random.uniform(0, 14)
+    y = random.uniform(0, 49)
     return [int(x),int(y)]
 
 
 def generate_random_coordinates_trash(initial_location, radius):
     angle = random.uniform(0, 2 * math.pi)
-    max_distance = min(radius, min(abs(initial_location[0] - 0), abs(initial_location[0] - 29)), 
-                               min(abs(initial_location[1] - 0), abs(initial_location[1] - 14)))
+    max_distance = min(radius, min(abs(initial_location[0] - 0), abs(initial_location[0] - 119)), 
+                               min(abs(initial_location[1] - 0), abs(initial_location[1] - 49)))
     distance = random.uniform(0, max_distance)
     
     # Generate random coordinates around the center
@@ -119,5 +119,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
-    time.sleep(2)
+    time.sleep(1)
 

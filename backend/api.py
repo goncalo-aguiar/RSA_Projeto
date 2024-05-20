@@ -65,7 +65,7 @@ def get_trash():
 
 @app.route('/api/visited', methods=['GET'])
 def get_visited():
-    print(visited_locations_set)
+    #print(visited_locations_set)
 
     return jsonify(visited_locations_set)
 

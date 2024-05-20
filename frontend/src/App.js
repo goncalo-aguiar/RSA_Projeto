@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const rows = 15;
-  const cols = 30;
-  const side = 50;
+  const rows = 50;
+  const cols = 120;
+  const side = 15;
   const [boats, setBoats] = useState([]);
   const [buoys, setBuoys] = useState([]);
   const [trash, setTrash] = useState([]);
@@ -122,7 +122,7 @@ function App() {
                 style={{
                   width: '100%',
                   height: '100%',
-                  backgroundColor: 'grey',
+                  backgroundColor: 'yellow',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',

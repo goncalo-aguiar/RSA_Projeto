@@ -49,7 +49,7 @@ def on_message(client, userdata, msg):
 
     elif data["type"] == "boia":
         distOtherMessage = calculateDistance(current_location, data['location'])
-        if distOtherMessage <= 3:
+        if distOtherMessage <= 5:
             print(f"Message from {msg.topic}: {data}", distOtherMessage)
             if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values():
                 
@@ -62,13 +62,13 @@ def on_message(client, userdata, msg):
 
 def generate_random_coordinates_Search(current_location):
     radius = 1
-    max_radius = max(29, 14)  # Ensures the radius does not go beyond the grid limits
+    max_radius = max(119, 49)  # Ensures the radius does not go beyond the grid limits
     while radius <= max_radius:
         surrounding_coords = [
             (current_location[0] + dx, current_location[1] + dy)
             for dx in range(-radius, radius + 1)
             for dy in range(-radius, radius + 1)
-            if (dx != 0 or dy != 0) and (0 <= current_location[0] + dx <= 29) and (0 <= current_location[1] + dy <= 14)
+            if (dx != 0 or dy != 0) and (0 <= current_location[0] + dx <= 119) and (0 <= current_location[1] + dy <= 49)
         ]
 
         unvisited_coords = [loc for loc in surrounding_coords if loc not in visited_locations]
@@ -83,18 +83,18 @@ def generate_random_coordinates_Search(current_location):
     return generate_random_coordinates()
 
 def generate_random_coordinates():
-    x = random.uniform(0, 29)
-    y = random.uniform(0, 14)
+    x = random.uniform(0, 119)
+    y = random.uniform(0, 49)
     new_location = (int(x), int(y))
     return new_location
 
 def get_surrounding_coordinates(center):
     x, y = center
-    surrounding_coords = [
-        (x-1, y-1), (x, y-1), (x+1, y-1),  # Top-left, Top, Top-right
-        (x-1, y),             (x+1, y),    # Left,      , Right
-        (x-1, y+1), (x, y+1), (x+1, y+1)   # Bottom-left, Bottom, Bottom-right
-    ]
+    surrounding_coords = []
+    radius = 3
+    for i in range(-radius, radius+1):
+        for j in range(-radius, radius+1):
+            surrounding_coords.append((x+i, y+j))
     return surrounding_coords
 
 def goTo(coordinates):
@@ -170,6 +170,6 @@ while True:
         if x not in visited_locations:
             visited_locations.append(x)
     
-    time.sleep(2)
+    time.sleep(1)
 
     
