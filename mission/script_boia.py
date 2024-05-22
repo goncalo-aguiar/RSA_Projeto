@@ -34,7 +34,7 @@ def on_message(client, userdata, msg):
     if data["type"] == "boat":
         distOtherMessage = calculateDistance(initial_location,data['location'])
         if distOtherMessage <=5:
-            print(f"Message from {msg.topic}: {data}")
+            #print(f"Message from {msg.topic}: {data}")
         
             if data["location"] == trash_location:
                 time_being_cleaned = time_being_cleaned+1
@@ -48,8 +48,8 @@ def on_message(client, userdata, msg):
         if data["id"] != boia_id:
             distOtherMessage = calculateDistance(initial_location,data['location'])
             if distOtherMessage <=5:
-
-                print(f"Message from {msg.topic}: {data}")
+                pass
+                #print(f"Message from {msg.topic}: {data}")
                
                 
                

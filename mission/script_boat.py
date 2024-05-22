@@ -25,16 +25,14 @@ def on_message(client, userdata, msg):
     global intention 
     global boias_limpas
     global visited_locations
-    
+
     if data["type"] == "boat":
         if data["id"] != boat_id:
-            #print(f"Message from {msg.topic}: {data}")
             distOtherMessage = calculateDistance(current_location, data['location'])
             if distOtherMessage <= 5:
                 for x in data["visited_locations"]:
                     if x not in visited_locations:
-                        visited_locations.append(x)  
-
+                        visited_locations.append(x)
                 if data["intention"] != [] and intention != []:
                     other_boat_intention = data["intention"][1]
                     if (other_boat_intention == intention[1]) and other_boat_intention not in boias_limpas.values():
@@ -50,22 +48,22 @@ def on_message(client, userdata, msg):
     elif data["type"] == "boia":
         distOtherMessage = calculateDistance(current_location, data['location'])
         if distOtherMessage <= 5:
-            print(f"Message from {msg.topic}: {data}", distOtherMessage)
+            #print(f"Message from {msg.topic}: {data}", distOtherMessage)
             if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values():
-                
                 intention = [data["id"], data["location"], data["trash_location"]]
-                print("intention",data["id"])
-            if data["status"] == "clean" and data["location"] not in boias_limpas.values() :
+                #print("intention", data["id"])
+            if data["status"] == "clean" and data["location"] not in boias_limpas.values():
                 boias_limpas[data["id"]] = data["location"]
                 intention = []
-            
 
 def generate_random_coordinates_Search(current_location):
     radius = 1
     max_radius = max(119, 49)  # Ensures the radius does not go beyond the grid limits
+    
+    
     while radius <= max_radius:
         surrounding_coords = [
-            (current_location[0] + dx, current_location[1] + dy)
+            [current_location[0] + dx, current_location[1] + dy]
             for dx in range(-radius, radius + 1)
             for dy in range(-radius, radius + 1)
             if (dx != 0 or dy != 0) and (0 <= current_location[0] + dx <= 119) and (0 <= current_location[1] + dy <= 49)
@@ -75,18 +73,16 @@ def generate_random_coordinates_Search(current_location):
         
         if unvisited_coords:
             return random.choice(unvisited_coords)
+
         radius += 1  # Increase the radius if all surrounding coordinates have been visited
         
     # If all coordinates are visited, return a completely random coordinate
-
-    
-    return generate_random_coordinates()
+    return [0,0]
 
 def generate_random_coordinates():
     x = random.uniform(0, 119)
     y = random.uniform(0, 49)
-    new_location = (int(x), int(y))
-    return new_location
+    return [int(x), int(y)]
 
 def get_surrounding_coordinates(center):
     x, y = center
@@ -94,7 +90,7 @@ def get_surrounding_coordinates(center):
     radius = 3
     for i in range(-radius, radius+1):
         for j in range(-radius, radius+1):
-            surrounding_coords.append((x+i, y+j))
+            surrounding_coords.append([x+i, y+j])
     return surrounding_coords
 
 def goTo(coordinates):
@@ -112,7 +108,7 @@ def goTo(coordinates):
             new_y = current_location[1] - 1
         else:
             new_y = current_location[1]
-        current_location = (new_x, new_y)  # Update current location as a tuple
+        current_location = [new_x, new_y]  # Update current location as a tuple
         return False
     else:
         return True
@@ -121,15 +117,17 @@ def send_message(client, topic, message):
     client.publish(topic, json.dumps(message))
 
 if len(sys.argv) < 3:
-    print("Usage: python script.py <broker_ip> <boat_id>")
+    print("Usage: python script.py <broker_ip> <boat_id> <loc_inicial_x> <loc_inicial_y> <num_boias>")
     sys.exit(1)
 
 own_ip = sys.argv[1]
 boat_id = sys.argv[2]
 
+current_location = [int(sys.argv[3]),int(sys.argv[4])]
+
 new_location = []
 intention = []
-current_location = generate_random_coordinates()
+
 boias_limpas = {}
 status = "procurando"
 visited_locations = list()
@@ -151,7 +149,7 @@ while True:
         "location": current_location,
         "status": status,
         "learning": boias_limpas,
-        "visited_locations":visited_locations
+        "visited_locations": visited_locations
     })
 
     if intention != []:
@@ -161,6 +159,7 @@ while True:
         if new_location == current_location or new_location == []:
             new_location = generate_random_coordinates_Search(current_location)
         goTo(new_location)
+        
         status = "procurando"
 
     surrounding = get_surrounding_coordinates(current_location)
@@ -170,6 +169,6 @@ while True:
         if x not in visited_locations:
             visited_locations.append(x)
     
-    time.sleep(1)
-
     
+    
+    time.sleep(1)

@@ -1,10 +1,10 @@
-xterm -e "python3 mission/script_boat.py 192.168.1.3 3" &
-xterm -e "python3 mission/script_boat.py 192.168.1.4 4" &
-xterm -e "python3 mission/script_boat.py 192.168.1.5 5" &
-xterm -e "python3 mission/script_boat.py 192.168.1.6 6" &
-xterm -e "python3 mission/script_boat.py 192.168.1.7 7" &
-xterm -e "python3 mission/script_boat.py 192.168.1.8 8" &
-xterm -e "python3 mission/script_boat.py 192.168.1.9 9" &
+xterm -e "python3 mission/script_boat.py 192.168.1.3 3 0 0 12" &
+xterm -e "python3 mission/script_boat.py 192.168.1.4 4 0 1 12" &
+xterm -e "python3 mission/script_boat.py 192.168.1.5 5 0 2 12" &
+xterm -e "python3 mission/script_boat.py 192.168.1.6 6 0 3 12 " &
+xterm -e "python3 mission/script_boat.py 192.168.1.7 7 0 4 12" &
+xterm -e "python3 mission/script_boat.py 192.168.1.8 8 0 5 12" &
+
 
 
 
