@@ -64,7 +64,7 @@ def on_message(client, userdata, msg):
 
 def generate_random_coordinates_Search(current_location):
     radius = 1
-    max_radius = max(119, 49)  # Ensures the radius does not go beyond the grid limits
+    max_radius = max(100, 49)  # Ensures the radius does not go beyond the grid limits
     
     
     while radius <= max_radius:
@@ -72,7 +72,7 @@ def generate_random_coordinates_Search(current_location):
             [current_location[0] + dx, current_location[1] + dy]
             for dx in range(-radius, radius + 1)
             for dy in range(-radius, radius + 1)
-            if (dx != 0 or dy != 0) and (0 <= current_location[0] + dx <= 119) and (0 <= current_location[1] + dy <= 49)
+            if (dx != 0 or dy != 0) and (0 <= current_location[0] + dx <= 100) and (0 <= current_location[1] + dy <= 49)
         ]
 
         unvisited_coords = [loc for loc in surrounding_coords if loc not in visited_locations]
@@ -86,7 +86,7 @@ def generate_random_coordinates_Search(current_location):
     return [0,0]
 
 def generate_random_coordinates():
-    x = random.uniform(0, 119)
+    x = random.uniform(0, 100)
     y = random.uniform(0, 49)
     return [int(x), int(y)]
 
@@ -102,7 +102,7 @@ def get_surrounding_coordinates(center):
 
 def is_within_valid_range(coordinate):
     x, y = coordinate
-    return 0 <= x <= 119 and 0 <= y <= 49
+    return 0 <= x <= 100 and 0 <= y <= 49
 def goTo(coordinates):
     global current_location
     if current_location != coordinates:
@@ -142,7 +142,7 @@ boias_limpas = {}
 status = "procurando"
 visited_locations = list()
 broker_ip = "192.168.1.2"
-broker_ip = "localhost"
+# broker_ip = "localhost"
 
 num_boias = int(sys.argv[5])
 
@@ -153,9 +153,10 @@ client.connect(broker_ip, 1883, 60)
 
 threading.Thread(target=client.loop_start).start()
 
+flag = ""
+
 while True:
 
-    
     send_message(client, f"nodes/{boat_id}", {
         "type": "boat",
         "id": boat_id,
@@ -174,13 +175,16 @@ while True:
     else:
         if new_location == current_location or new_location == []:
             print(len(boias_limpas),num_boias)
-           
-            
-            if len(boias_limpas) == num_boias or len(visited_locations) >= 6000 :
-                new_location = [0,0]
+            if flag != "acabou":
+                if len(boias_limpas) == num_boias or len(visited_locations) >= 5050 :
+                    new_location = [0,0]
+                    flag = "acabou"
+                else:
+                    new_location = generate_random_coordinates_Search(current_location)
             else:
-                new_location = generate_random_coordinates_Search(current_location)
-
+                new_location = [0,0]
+                if current_location == [0,0]:
+                    sys.exit(0)
 
         goTo(new_location)
         
@@ -195,4 +199,4 @@ while True:
     
     
     
-    time.sleep(1)
+    time.sleep(0.5)

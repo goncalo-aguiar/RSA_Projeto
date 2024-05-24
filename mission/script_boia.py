@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
             if data["location"] == trash_location:
                 time_being_cleaned = time_being_cleaned+1
             
-            if time_being_cleaned >= 3:
+            if time_being_cleaned >= 10:
                 status= "clean"
                 time_being_cleaned = 0
                 trash_location = []
@@ -65,7 +65,7 @@ def send_message(client, topic, message):
 
 def generate_random_coordinates():
     
-    x = random.uniform(0, 119)
+    x = random.uniform(0, 100)
     
     y = random.uniform(0, 49)
     return [int(x),int(y)]
@@ -73,7 +73,7 @@ def generate_random_coordinates():
 
 def generate_random_coordinates_trash(initial_location, radius):
     angle = random.uniform(0, 2 * math.pi)
-    max_distance = min(radius, min(abs(initial_location[0] - 0), abs(initial_location[0] - 119)), 
+    max_distance = min(radius, min(abs(initial_location[0] - 0), abs(initial_location[0] - 100)), 
                                min(abs(initial_location[1] - 0), abs(initial_location[1] - 49)))
     distance = random.uniform(0, max_distance)
     
@@ -102,7 +102,7 @@ client.on_message = on_message
 
 
 broker_ip = "192.168.1.2"
-broker_ip = "localhost"
+# broker_ip = "localhost"
 client.connect(broker_ip, 1883, 60)
 
 time_being_cleaned = 0
@@ -119,5 +119,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
-    time.sleep(1)
+    time.sleep(0.5)
 

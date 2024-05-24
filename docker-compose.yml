@@ -55,6 +55,7 @@ services:
     networks:
       mqtt_network:
         ipv4_address: 192.168.1.7
+        
   node6:
     build: .
     command: tail -f /dev/null
@@ -102,6 +103,79 @@ services:
     networks:
       mqtt_network:
         ipv4_address: 192.168.1.12
+
+  node11:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.13
+
+  node12:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.14
+
+  node13:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.15
+
+  node14:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.16
+
+  node15:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.17
+
+  node16:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.18
+
+  node17:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.19
+
+  node18:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      mqtt_network:
+        ipv4_address: 192.168.1.20
+  
   
 
   

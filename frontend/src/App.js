@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   const rows = 50;
-  const cols = 120;
+  const cols = 101;
   const side = 15;
   const [boats, setBoats] = useState([]);
   const [buoys, setBuoys] = useState([]);
@@ -35,7 +35,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 1000); // Fetch every 5 seconds
+    const interval = setInterval(fetchData, 500); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
