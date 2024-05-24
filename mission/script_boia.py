@@ -102,7 +102,7 @@ client.on_message = on_message
 
 
 broker_ip = "192.168.1.2"
-# broker_ip = "localhost"
+broker_ip = "localhost"
 client.connect(broker_ip, 1883, 60)
 
 time_being_cleaned = 0

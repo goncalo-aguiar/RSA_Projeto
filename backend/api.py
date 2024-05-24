@@ -46,7 +46,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect("192.168.1.2", 1883, 60)  # Connect to the MQTT broker
+client.connect("localhost", 1883, 60)  # Connect to the MQTT broker
 client.loop_start()  # Start the loop to process callbacks
 
 @app.route('/api/boats', methods=['GET'])

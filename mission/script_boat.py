@@ -21,15 +21,17 @@ def calculateDistance(loc1, loc2):
     return ((xLoc2 - xLoc1)**2 + (yLoc2 - yLoc1)**2)**0.5
 
 def on_message(client, userdata, msg):
+
     data = json.loads(msg.payload.decode("utf-8"))
     global intention 
     global boias_limpas
     global visited_locations
+    global flag
 
     if data["type"] == "boat":
         if data["id"] != boat_id:
             distOtherMessage = calculateDistance(current_location, data['location'])
-            if distOtherMessage <= 6:
+            if distOtherMessage <= 6 and flag != "acabou":
                 for x in data["visited_locations"]:
                     if x not in visited_locations:
                         visited_locations.append(x)
@@ -142,7 +144,7 @@ boias_limpas = {}
 status = "procurando"
 visited_locations = list()
 broker_ip = "192.168.1.2"
-# broker_ip = "localhost"
+broker_ip = "localhost"
 
 num_boias = int(sys.argv[5])
 
@@ -151,9 +153,9 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.connect(broker_ip, 1883, 60)
 
-threading.Thread(target=client.loop_start).start()
-
 flag = ""
+
+threading.Thread(target=client.loop_start).start()
 
 while True:
 
@@ -174,7 +176,7 @@ while True:
         status = "recolhendo"
     else:
         if new_location == current_location or new_location == []:
-            print(len(boias_limpas),num_boias)
+            # print(len(boias_limpas),num_boias)
             if flag != "acabou":
                 if len(boias_limpas) == num_boias or len(visited_locations) >= 5050 :
                     new_location = [0,0]
