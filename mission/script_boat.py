@@ -29,10 +29,11 @@ def on_message(client, userdata, msg):
     if data["type"] == "boat":
         if data["id"] != boat_id:
             distOtherMessage = calculateDistance(current_location, data['location'])
-            if distOtherMessage <= 5:
+            if distOtherMessage <= 6:
                 for x in data["visited_locations"]:
                     if x not in visited_locations:
                         visited_locations.append(x)
+                
                 if data["intention"] != [] and intention != []:
                     other_boat_intention = data["intention"][1]
                     if (other_boat_intention == intention[1]) and other_boat_intention not in boias_limpas.values():
@@ -44,6 +45,11 @@ def on_message(client, userdata, msg):
                             intention = []
                         else:
                             intention = data["intention"]
+                else:
+                    for key, value in data["learning"].items():
+                        if key not in boias_limpas and value != data["intention"] :
+                            boias_limpas[key] = value
+                            
 
     elif data["type"] == "boia":
         distOtherMessage = calculateDistance(current_location, data['location'])
@@ -52,7 +58,7 @@ def on_message(client, userdata, msg):
             if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values():
                 intention = [data["id"], data["location"], data["trash_location"]]
                 #print("intention", data["id"])
-            if data["status"] == "clean" and data["location"] not in boias_limpas.values():
+            if data["status"] == "clean" :
                 boias_limpas[data["id"]] = data["location"]
                 intention = []
 
@@ -87,12 +93,16 @@ def generate_random_coordinates():
 def get_surrounding_coordinates(center):
     x, y = center
     surrounding_coords = []
-    radius = 3
+    radius = 4
     for i in range(-radius, radius+1):
         for j in range(-radius, radius+1):
             surrounding_coords.append([x+i, y+j])
     return surrounding_coords
 
+
+def is_within_valid_range(coordinate):
+    x, y = coordinate
+    return 0 <= x <= 119 and 0 <= y <= 49
 def goTo(coordinates):
     global current_location
     if current_location != coordinates:
@@ -134,6 +144,8 @@ visited_locations = list()
 broker_ip = "192.168.1.2"
 broker_ip = "localhost"
 
+num_boias = int(sys.argv[5])
+
 client = mqtt.Client(client_id=boat_id)
 client.on_connect = on_connect
 client.on_message = on_message
@@ -142,6 +154,8 @@ client.connect(broker_ip, 1883, 60)
 threading.Thread(target=client.loop_start).start()
 
 while True:
+
+    
     send_message(client, f"nodes/{boat_id}", {
         "type": "boat",
         "id": boat_id,
@@ -152,21 +166,31 @@ while True:
         "visited_locations": visited_locations
     })
 
+    
+
     if intention != []:
         goTo(intention[2])
         status = "recolhendo"
     else:
         if new_location == current_location or new_location == []:
-            new_location = generate_random_coordinates_Search(current_location)
+            print(len(boias_limpas),num_boias)
+           
+            
+            if len(boias_limpas) == num_boias or len(visited_locations) >= 6000 :
+                new_location = [0,0]
+            else:
+                new_location = generate_random_coordinates_Search(current_location)
+
+
         goTo(new_location)
         
         status = "procurando"
 
     surrounding = get_surrounding_coordinates(current_location)
-    if current_location not in visited_locations:
+    if current_location not in visited_locations and is_within_valid_range(current_location):
         visited_locations.append(current_location)
     for x in surrounding:
-        if x not in visited_locations:
+        if x not in visited_locations and is_within_valid_range(x):
             visited_locations.append(x)
     
     

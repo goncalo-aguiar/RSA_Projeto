@@ -33,7 +33,7 @@ def on_message(client, userdata, msg):
     
     if data["type"] == "boat":
         distOtherMessage = calculateDistance(initial_location,data['location'])
-        if distOtherMessage <=5:
+        if distOtherMessage <=6:
             #print(f"Message from {msg.topic}: {data}")
         
             if data["location"] == trash_location:

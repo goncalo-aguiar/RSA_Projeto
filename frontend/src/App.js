@@ -48,7 +48,7 @@ function App() {
         const foundBoats = boats.filter(boat => boat.position[0] === j && boat.position[1] === i);
         const foundTrash = trash.filter(tr => tr.trashLocation[0] === j && tr.trashLocation[1] === i);
         const isVisited = visited.some(location => location[0] === j && location[1] === i); // Check if current cell is in visited list
-  
+
         const cell = (
           <div
             key={`${i}-${j}`}
@@ -59,62 +59,62 @@ function App() {
               position: 'absolute',
               top: i * side,
               left: j * side,
-              backgroundColor: isVisited ? 'grey' : 'light_blue', // Set background color based on visited status
+              backgroundColor: isVisited ? 'grey' : '#282c34', // Set background color based on visited status
             }}
           >
             {foundBoats.map(boat => (
-              <React.Fragment key={boat.id}>
+              <div
+                key={boat.id}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: boat.type === 'boat' ? 'blue' : 'red',
+                  borderRadius: '50%',
+                  position: 'relative',
+                  zIndex: 2, // Ensure boat is on top
+                }}
+              >
                 <div
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: boat.type === 'boat' ? 'blue' : 'red',
+                    position: 'absolute',
+                    top: -side * 5,
+                    left: -side * 5,
+                    width: side * 11,
+                    height: side * 11,
                     borderRadius: '50%',
-                    position: 'relative',
+                    border: '3px dashed rgba(154, 205, 50, 1)',
+                    pointerEvents: 'none',
                   }}
-                >
-                  {`${boat.type} ${boat.id} ${boat.intention}`}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: -side * 4,
-                      left: -side * 4,
-                      width: side * 9,
-                      height: side * 9,
-                      borderRadius: '50%',
-                      border: '1px dashed rgba(0, 128, 0, 0.5)',
-                      pointerEvents: 'none',
-                    }}
-                  ></div>
-                </div>
-              </React.Fragment>
+                />
+                {`${boat.type} ${boat.id} ${boat.intention}`}
+              </div>
             ))}
             {foundBuoys.map(buoy => (
-              <React.Fragment key={buoy.id}>
+              <div
+                key={buoy.id}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: buoy.type === 'boat' ? 'blue' : 'red',
+                  borderRadius: '50%',
+                  position: 'relative',
+                  zIndex: 2, // Ensure buoy is on top
+                }}
+              >
                 <div
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: buoy.type === 'boat' ? 'blue' : 'red',
+                    position: 'absolute',
+                    top: -side * 4,
+                    left: -side * 4,
+                    width: side * 9,
+                    height: side * 9,
                     borderRadius: '50%',
-                    position: 'relative',
+                    border: '3px dashed rgba(238, 130, 238, 1)',
+                    pointerEvents: 'none',
                   }}
-                >
-                  {`${buoy.type} ${buoy.id}`}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: -side * 4,
-                      left: -side * 4,
-                      width: side * 9,
-                      height: side * 9,
-                      borderRadius: '50%',
-                      border: '1px dashed rgba(0, 128, 0, 0.5)',
-                      pointerEvents: 'none',
-                    }}
-                  ></div>
-                </div>
-              </React.Fragment>
+                />
+                {`${buoy.type} ${buoy.id}`}
+              </div>
             ))}
             {foundTrash.map(tr => (
               <div
@@ -127,6 +127,7 @@ function App() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   color: 'white',
+                  zIndex: 2, // Ensure trash is on top
                 }}
               >
                 Trash {tr.id}
@@ -139,7 +140,7 @@ function App() {
     }
     return grid;
   };
-  
+
   return (
     <div className="App">
       <header className="App-header">
@@ -152,4 +153,3 @@ function App() {
 }
 
 export default App;
-
