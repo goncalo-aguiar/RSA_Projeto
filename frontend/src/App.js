@@ -35,7 +35,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 500); // Fetch every 5 seconds
+    const interval = setInterval(fetchData, 1000); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -77,10 +77,10 @@ function App() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: -side * 5,
-                    left: -side * 5,
-                    width: side * 11,
-                    height: side * 11,
+                    top: -side * 4,
+                    left: -side * 4,
+                    width: side * 9,
+                    height: side * 9,
                     borderRadius: '50%',
                     border: '3px dashed rgba(154, 205, 50, 1)',
                     pointerEvents: 'none',

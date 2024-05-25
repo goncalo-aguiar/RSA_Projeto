@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     net-tools \
     telnet \
-    iputils-ping
+    iputils-ping \
+    procps
+
 
 # Copy the Python script into the container
 COPY mission/script_boat.py /app/

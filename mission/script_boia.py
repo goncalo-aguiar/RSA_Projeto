@@ -33,7 +33,7 @@ def on_message(client, userdata, msg):
     
     if data["type"] == "boat":
         distOtherMessage = calculateDistance(initial_location,data['location'])
-        if distOtherMessage <=6:
+        if distOtherMessage <=5:
             #print(f"Message from {msg.topic}: {data}")
         
             if data["location"] == trash_location:
@@ -44,12 +44,22 @@ def on_message(client, userdata, msg):
                 time_being_cleaned = 0
                 trash_location = []
 
+            for key, value in data["learning"].items():
+                if key not in boias_limpas and value != data["intention"] :
+                    boias_limpas[key] = value
+
     elif data["type"] == "boia":
         if data["id"] != boia_id:
             distOtherMessage = calculateDistance(initial_location,data['location'])
             if distOtherMessage <=5:
-                pass
-                #print(f"Message from {msg.topic}: {data}")
+                print(f"Message from {msg.topic}: {data}")
+                for key, value in data["learning"].items():
+                    if key not in boias_limpas and data["status"] == "clean" :
+                        boias_limpas[key] = value
+                    
+
+
+               
                
                 
                
@@ -102,13 +112,13 @@ client.on_message = on_message
 
 
 broker_ip = "192.168.1.2"
-broker_ip = "localhost"
+#broker_ip = "localhost"
 client.connect(broker_ip, 1883, 60)
 
 time_being_cleaned = 0
 status = "dirty"
 
-
+boias_limpas = {}
 
 initial_location = generate_random_coordinates()
 
@@ -118,6 +128,6 @@ trash_location = generate_random_coordinates_trash(initial_location,2)
 threading.Thread(target=client.loop_start).start()
 
 while True:
-    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location})
-    time.sleep(0.5)
+    send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location,"learning":boias_limpas})
+    time.sleep(1)
 

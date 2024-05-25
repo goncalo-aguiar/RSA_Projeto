@@ -31,7 +31,7 @@ def on_message(client, userdata, msg):
     if data["type"] == "boat":
         if data["id"] != boat_id:
             distOtherMessage = calculateDistance(current_location, data['location'])
-            if distOtherMessage <= 6 and flag != "acabou":
+            if distOtherMessage <= 5 and flag != "acabou":
                 for x in data["visited_locations"]:
                     if x not in visited_locations:
                         visited_locations.append(x)
@@ -57,12 +57,17 @@ def on_message(client, userdata, msg):
         distOtherMessage = calculateDistance(current_location, data['location'])
         if distOtherMessage <= 5:
             #print(f"Message from {msg.topic}: {data}", distOtherMessage)
-            if data["status"] == "dirty" and intention == [] and data["location"] not in boias_limpas.values():
+            if data["status"] == "dirty" and intention == [] :
                 intention = [data["id"], data["location"], data["trash_location"]]
                 #print("intention", data["id"])
             if data["status"] == "clean" :
                 boias_limpas[data["id"]] = data["location"]
                 intention = []
+                for key, value in data["learning"].items():
+                    if key not in boias_limpas  :
+                        boias_limpas[key] = value
+            
+            
 
 def generate_random_coordinates_Search(current_location):
     radius = 1
@@ -95,7 +100,7 @@ def generate_random_coordinates():
 def get_surrounding_coordinates(center):
     x, y = center
     surrounding_coords = []
-    radius = 4
+    radius = 3
     for i in range(-radius, radius+1):
         for j in range(-radius, radius+1):
             surrounding_coords.append([x+i, y+j])
@@ -144,7 +149,7 @@ boias_limpas = {}
 status = "procurando"
 visited_locations = list()
 broker_ip = "192.168.1.2"
-broker_ip = "localhost"
+#broker_ip = "localhost"
 
 num_boias = int(sys.argv[5])
 
@@ -201,4 +206,4 @@ while True:
     
     
     
-    time.sleep(0.5)
+    time.sleep(1)
