@@ -9,6 +9,8 @@ function App() {
   const [buoys, setBuoys] = useState([]);
   const [trash, setTrash] = useState([]);
   const [visited, setVisited] = useState([]);
+  const [buoyStatus, setBuoyStatus] = useState({});
+  const [cleanedMessage, setCleanedMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +31,26 @@ function App() {
         const visitedData = await responseVisited.json();
         setVisited(visitedData);
 
+        // Atualiza o status das boias
+        const newBuoyStatus = {};
+        trash.forEach(({ id, trashLocation }) => {
+          newBuoyStatus[id] = trashLocation.length === 0 ? 'clean' : 'dirty';
+        });
+        setBuoyStatus(newBuoyStatus);
+
+        // Verifica se o trash foi limpo
+        trash.forEach(({ id, trashLocation }) => {
+          console.log(buoyStatus[id])
+          if (trashLocation.length === 0 && buoyStatus[id] === 'dirty') {
+            setCleanedMessage(`Boia ${id} foi limpa!`);
+            setTimeout(() => {
+              setCleanedMessage('');
+            }, 3000);
+          }
+        });
+
+
+
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -38,7 +60,7 @@ function App() {
     const interval = setInterval(fetchData, 1000); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [trash, buoyStatus]);
 
   const createGrid = () => {
     const grid = [];
@@ -130,7 +152,7 @@ function App() {
                   zIndex: 2, // Ensure trash is on top
                 }}
               >
-                Trash {tr.id}
+                Lixo {tr.id}
               </div>
             ))}
           </div>
@@ -146,6 +168,7 @@ function App() {
       <header className="App-header">
         <div style={{ position: 'relative', width: cols * side, height: rows * side }}>
           {createGrid()}
+          {cleanedMessage && <div style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'green', color: 'white', padding: '5px', borderRadius: '5px' }}>{cleanedMessage}</div>}
         </div>
       </header>
     </div>

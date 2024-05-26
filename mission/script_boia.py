@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
             if data["location"] == trash_location:
                 time_being_cleaned = time_being_cleaned+1
             
-            if time_being_cleaned >= 10:
+            if time_being_cleaned >= 5:
                 status= "clean"
                 time_being_cleaned = 0
                 trash_location = []
