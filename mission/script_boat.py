@@ -60,12 +60,19 @@ def on_message(client, userdata, msg):
             if data["status"] == "dirty" and intention == [] :
                 intention = [data["id"], data["location"], data["trash_location"]]
                 #print("intention", data["id"])
-            if data["status"] == "clean" :
+            if data["status"] == "clean"   :
                 boias_limpas[data["id"]] = data["location"]
-                intention = []
+                print(intention)
+                print(data["id"], data["location"], data["trash_location"])
+                if intention != []:
+                    if intention[0] == data["id"]:
+                        intention = []
+
                 for key, value in data["learning"].items():
                     if key not in boias_limpas  :
                         boias_limpas[key] = value
+                
+                    
             
             
 
@@ -172,6 +179,7 @@ while True:
         "status": status,
         "learning": boias_limpas,
         "visited_locations": visited_locations
+        
     })
 
     
@@ -206,4 +214,4 @@ while True:
     
     
     
-    time.sleep(1)
+    time.sleep(0.5)

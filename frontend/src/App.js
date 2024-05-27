@@ -57,7 +57,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 1000); // Fetch every 5 seconds
+    const interval = setInterval(fetchData, 500); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, [trash, buoyStatus]);

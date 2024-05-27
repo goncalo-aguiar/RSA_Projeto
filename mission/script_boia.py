@@ -129,5 +129,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location,"learning":boias_limpas})
-    time.sleep(1)
+    time.sleep(0.5)
 
