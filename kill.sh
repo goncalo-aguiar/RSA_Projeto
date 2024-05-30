@@ -20,6 +20,10 @@ containers=(
   "projeto_rsa-node16-1"
   "projeto_rsa-node17-1"
   "projeto_rsa-node18-1"
+  "projeto_rsa-node19-1"
+  "projeto_rsa-node20-1"
+  "projeto_rsa-node21-1"
+  "projeto_rsa-node22-1"
 )
 
 # Iterate over each container and stop the running Python script

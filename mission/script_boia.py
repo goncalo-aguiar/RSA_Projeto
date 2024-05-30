@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
             if data["location"] == trash_location:
                 time_being_cleaned = time_being_cleaned+1
             
-            if time_being_cleaned >= 5:
+            if time_being_cleaned >= 7:
                 status= "clean"
                 time_being_cleaned = 0
                 trash_location = []
@@ -52,7 +52,7 @@ def on_message(client, userdata, msg):
         if data["id"] != boia_id:
             distOtherMessage = calculateDistance(initial_location,data['location'])
             if distOtherMessage <=5:
-                print(f"Message from {msg.topic}: {data}")
+                #print(f"Message from {msg.topic}: {data}")
                 for key, value in data["learning"].items():
                     if key not in boias_limpas and data["status"] == "clean" :
                         boias_limpas[key] = value
@@ -129,5 +129,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location,"learning":boias_limpas})
-    time.sleep(0.5)
+    time.sleep(0.7)
 

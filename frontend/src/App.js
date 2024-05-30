@@ -57,7 +57,7 @@ function App() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 500); // Fetch every 5 seconds
+    const interval = setInterval(fetchData, 700); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, [trash, buoyStatus]);
@@ -108,7 +108,7 @@ function App() {
                     pointerEvents: 'none',
                   }}
                 />
-                {`${boat.type} ${boat.id} ${boat.intention}`}
+                {`${boat.type} ${boat.id}`}
               </div>
             ))}
             {foundBuoys.map(buoy => (
