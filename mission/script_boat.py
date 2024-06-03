@@ -31,7 +31,7 @@ def on_message(client, userdata, msg):
     if data["type"] == "boat":
         if data["id"] != boat_id:
             distOtherMessage = calculateDistance(current_location, data['location'])
-            if distOtherMessage <= 5 and flag != "acabou" and flag != "goingTo00":
+            if distOtherMessage <= 6 and flag != "acabou" and flag != "goingTo00":
                 for x in data["visited_locations"]:
                     if x not in visited_locations:
                         visited_locations.append(x)
@@ -277,4 +277,4 @@ while True:
     
     
     
-    time.sleep(0.7)
+    time.sleep(0.6)

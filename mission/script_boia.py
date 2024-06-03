@@ -33,7 +33,7 @@ def on_message(client, userdata, msg):
     
     if data["type"] == "boat":
         distOtherMessage = calculateDistance(initial_location,data['location'])
-        if distOtherMessage <=5:
+        if distOtherMessage <=6:
             #print(f"Message from {msg.topic}: {data}")
         
             if data["location"] == trash_location:
@@ -129,5 +129,5 @@ threading.Thread(target=client.loop_start).start()
 
 while True:
     send_message(client, f"nodes/{boia_id}", {"type":"boia","id": boia_id,"location":initial_location,"status":status,"trash_location":trash_location,"learning":boias_limpas})
-    time.sleep(0.7)
+    time.sleep(0.6)
 
